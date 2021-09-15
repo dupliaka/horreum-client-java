@@ -3,6 +3,8 @@ A low-level client library for the Hyperfoil Horreum REST API, incorportaing Key
 
 Project website: [https://horreum.hyperfoil.io](https://horreum.hyperfoil.io).
 
+## Usage
+
 Instantiating client instance;
 
         HorreumClient horreumClient = new HorreumClient.Builder()
@@ -22,7 +24,7 @@ Adding a new test in Horreum
         newTest.owner = "dev-team";
         newTest.description = "Example new test definition";
 
-        Test newTest = horreumClient.testService.add(newTest);
+        Test persistedTest = horreumClient.testService.add(newTest);
 
 Uploading a new Run to an existing test, using extractors to extract test meta-data from payload;
 
@@ -35,5 +37,31 @@ Uploading a new Run to an existing test, using extractors to extract test meta-d
         try {
             horreumClient.runService.addRunFromData("$.start", "$.stop", newTest.name, getProperty("horreum.test.owner"), Access.PUBLIC, null, null, "test", payload);
         } catch (BadRequestException badRequestException) {
-            fail(badRequestException.getMessage() + (badRequestException.getCause() != null ? " : " + badRequestException.getCause().getMessage() : ""));
+            // handle failed request
         }
+
+## Building
+
+---
+**NOTE**
+
+At present, `horreum-client-java` has not been published to maven central. In order to use the client, users need to install the maven artifacts to their local maven repository
+
+---
+  
+### Building without tests
+
+    $ mvn clean install -DskipTests
+
+### Running Testsuite
+
+The test suite starts the full Horreum architecture, including keycloak and grafana, to allow for testing `horreum-client-java` against a running horreum environment
+
+---
+**NOTE**
+
+**In order to run the testsuite, docker needs to be running on your local machine**
+
+---
+    
+    $ mvn clean verify
