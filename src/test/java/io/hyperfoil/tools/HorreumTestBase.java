@@ -85,6 +85,7 @@ public class HorreumTestBase {
         if (START_HORREUM_INFRA) {
 
             environment = new DockerComposeContainer(new File("src/test/resources/testcontainers/docker-compose.yml"))
+                    .withLocalCompose(true)
                     .withExposedService("postgres_1", 5432)
             ;
             environment.start();
